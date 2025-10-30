@@ -5,12 +5,10 @@ import numpy as np
 import sys
 import os
 
-# Add the project root to the Python path
-project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-if project_root not in sys.path:
-    sys.path.insert(0, project_root)
+# Add the project root to the Python path for the test runner
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from src.data_processing import get_stock_data
+from data_processing import get_stock_data
 
 class TestDataProcessing(unittest.TestCase):
 

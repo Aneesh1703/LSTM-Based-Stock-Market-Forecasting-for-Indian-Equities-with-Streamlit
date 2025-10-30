@@ -19,13 +19,11 @@ This project is an AI-powered stock price prediction application that forecasts 
 ├── models/
 │   ├── lstm_stock_model.keras
 │   └── scaler.pkl
-├── src/
-│   ├── __init__.py
-│   ├── app.py
-│   ├── data_processing.py
-│   └── model_training.py
 ├── tests/
 │   └── test_data_processing.py
+├── app.py
+├── data_processing.py
+├── model_training.py
 ├── README.md
 └── requirements.txt
 ```
@@ -55,7 +53,7 @@ This project is an AI-powered stock price prediction application that forecasts 
 The project includes pre-trained model and scaler files. However, if you wish to retrain the model with the latest data, you can run the training script:
 
 ```sh
-python -m src.model_training
+python model_training.py
 ```
 
 _Note: The `yfinance` library can occasionally be unreliable. If you encounter data fetching errors during training, please try running the script again after a short while._
@@ -65,7 +63,7 @@ _Note: The `yfinance` library can occasionally be unreliable. If you encounter d
 To launch the Streamlit web interface, run the following command:
 
 ```sh
-streamlit run src/app.py
+streamlit run app.py
 ```
 
 You can then access the application in your web browser at `http://localhost:8501`.
