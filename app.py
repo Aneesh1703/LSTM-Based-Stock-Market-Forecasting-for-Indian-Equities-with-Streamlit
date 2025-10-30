@@ -4,21 +4,8 @@ import pandas as pd
 from tensorflow.keras.models import load_model
 import joblib
 import os
-import yfinance as yf
 
-from data_processing import get_indian_stocks, get_stock_data
-
-def get_stock_data_for_chart(ticker, period="6mo"):
-    """Fetches historical stock data and returns it as a DataFrame."""
-    try:
-        stock_df = yf.download(ticker, period=period, interval="1d")
-        if stock_df.empty:
-            st.error(f"No data found for {ticker}")
-            return None
-        return stock_df
-    except Exception as e:
-        st.error(f"Error fetching data for {ticker}: {e}")
-        return None
+from data_processing import get_indian_stocks, fetch_stock_data_df
 
 # Load trained model and scaler
 MODEL_PATH = os.path.join("models", "lstm_stock_model.keras")
@@ -43,30 +30,33 @@ tickers = get_indian_stocks()
 selected_stock = st.selectbox("Select a stock:", tickers)
 
 if st.button("Predict"):
-    # Fetch data for prediction (last 30 days)
-    data = get_stock_data(selected_stock, period="31d")
+    # Fetch the historical data as a DataFrame
+    stock_df = fetch_stock_data_df(selected_stock, period="6mo")
 
-    if data is None or len(data) < 30:
-        st.error("Not enough data available! Need at least 30 days of stock prices.")
+    if stock_df is None:
+        st.error("Failed to fetch stock data. The chart cannot be displayed.")
     else:
-        try:
-            # Scale the data and prepare the input for the model
-            scaled_data = scaler.transform(data)
-            test_input = scaled_data[-30:].reshape(1, 30, 1) # 1 feature
+        st.subheader("Historical Stock Prices")
+        st.line_chart(stock_df['Close'])
 
-            # Make a prediction
-            pred_scaled = model.predict(test_input)
+        # Prepare data for prediction
+        data = stock_df['Close'].values.reshape(-1, 1)
 
-            # Inverse transform the prediction
-            pred = scaler.inverse_transform(pred_scaled)
+        if data.shape[0] < 30:
+            st.warning("Not enough data for prediction (need at least 30 days).")
+        else:
+            try:
+                # Scale the data and prepare the input for the model
+                scaled_data = scaler.transform(data)
+                test_input = scaled_data[-30:].reshape(1, 30, 1) # 1 feature
 
-            st.success(f"Predicted Stock Price for {selected_stock}: ₹{pred[0][0]:.2f}")
+                # Make a prediction
+                pred_scaled = model.predict(test_input)
 
-            # Fetch data for the chart
-            chart_data = get_stock_data_for_chart(selected_stock)
-            if chart_data is not None:
-                st.subheader("Historical Stock Prices")
-                st.line_chart(chart_data['Close'])
+                # Inverse transform the prediction
+                pred = scaler.inverse_transform(pred_scaled)
 
-        except Exception as e:
-            st.error(f"Prediction error: {e}")
+                st.success(f"Predicted Stock Price for {selected_stock}: ₹{pred[0][0]:.2f}")
+
+            except Exception as e:
+                st.error(f"Prediction error: {e}")

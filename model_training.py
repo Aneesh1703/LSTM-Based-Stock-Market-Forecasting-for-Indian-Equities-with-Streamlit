@@ -6,7 +6,7 @@ from sklearn.preprocessing import MinMaxScaler
 import joblib
 import os
 
-from data_processing import get_indian_stocks, get_stock_data, create_training_data
+from data_processing import get_indian_stocks, fetch_stock_data_df, create_training_data
 
 def train_model():
     """Trains the LSTM model and saves it."""
@@ -14,9 +14,9 @@ def train_model():
     all_data = []
 
     for ticker in tickers:
-        data = get_stock_data(ticker)
-        if data is not None:
-            all_data.append(data)
+        stock_df = fetch_stock_data_df(ticker, period="2y")
+        if stock_df is not None:
+            all_data.append(stock_df['Close'].values.reshape(-1, 1))
 
     if not all_data:
         print("No valid stock data available for training.")
