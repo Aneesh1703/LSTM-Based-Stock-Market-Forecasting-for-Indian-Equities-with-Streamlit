@@ -2,12 +2,11 @@
 
 ## Overview
 
-This project is an AI-powered stock price prediction application that forecasts future stock prices using a Long Short-Term Memory (LSTM) neural network. The application is built with Python and features a user-friendly web interface created with Streamlit. It incorporates feature engineering, including the use of simple moving averages, to enhance prediction accuracy. The codebase is structured for maintainability and includes unit tests to ensure reliability.
+This project is an AI-powered stock price prediction application that forecasts future stock prices using a Long Short-Term Memory (LSTM) neural network. The application is built with Python and features a user-friendly web interface created with Streamlit. The codebase is structured for maintainability and includes unit tests to ensure reliability.
 
 ## Key Features
 
-- **LSTM-Based Prediction Model**: Utilizes a sophisticated LSTM model to forecast stock prices based on historical data.
-- **Feature Engineering**: Enhances model accuracy by incorporating technical indicators, such as the 10-day Simple Moving Average (SMA).
+- **LSTM-Based Prediction Model**: Utilizes an LSTM model to forecast stock prices based on historical data.
 - **Interactive Web Interface**: A Streamlit application allows users to select from a list of Indian stocks and receive real-time price predictions.
 - **Data Visualization**: Displays historical stock price data in an interactive chart, providing users with visual context for the predictions.
 - **Modular and Maintainable Code**: The project is organized into distinct modules for data processing, model training, and application logic, following software engineering best practices.
