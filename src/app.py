@@ -5,6 +5,15 @@ from tensorflow.keras.models import load_model
 import joblib
 import os
 import yfinance as yf
+import sys
+
+# Add the project root to the Python path
+# This is necessary to ensure that the `src` module can be found
+# when running the app from the `src` directory.
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
+
 from src.data_processing import get_indian_stocks, get_stock_data
 
 def get_stock_data_for_chart(ticker, period="6mo"):

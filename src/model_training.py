@@ -5,6 +5,13 @@ from tensorflow.keras.layers import LSTM, Dense
 from sklearn.preprocessing import MinMaxScaler
 import joblib
 import os
+import sys
+
+# Add the project root to the Python path
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
+
 from src.data_processing import get_indian_stocks, get_stock_data, create_training_data
 
 def train_model():
