@@ -5,39 +5,35 @@ from tensorflow.keras.layers import LSTM, Dense
 from sklearn.preprocessing import MinMaxScaler
 import joblib
 import os
-from src.data_processing import get_indian_stocks, get_stock_data, create_training_data
+
+from data_processing import get_indian_stocks, fetch_stock_data_df, create_training_data
 
 def train_model():
-    """Trains the LSTM model with engineered features and saves it."""
+    """Trains the LSTM model and saves it."""
     tickers = get_indian_stocks()
     all_data = []
 
     for ticker in tickers:
-        # get_stock_data now returns data with features (Close, SMA)
-        data = get_stock_data(ticker)
-        if data is not None:
-            all_data.append(data)
+        stock_df = fetch_stock_data_df(ticker, period="2y")
+        if stock_df is not None:
+            all_data.append(stock_df['Close'].values.reshape(-1, 1))
 
     if not all_data:
         print("No valid stock data available for training.")
         return
 
-    # Concatenate all data
     data = np.concatenate(all_data, axis=0)
 
-    # Scale both features (Close and SMA)
     scaler = MinMaxScaler()
     scaled_data = scaler.fit_transform(data)
 
-    # Create training data with the new features
     X_train, y_train = create_training_data(scaled_data)
 
-    # The data is already in the correct shape: [samples, time steps, features]
-    # No need to reshape X_train if create_training_data handles it correctly
+    # Reshape input to be [samples, time steps, features] which is required for LSTM
+    X_train = X_train.reshape(X_train.shape[0], X_train.shape[1], 1)
 
-    # Define the model, updating the input shape for multiple features
     model = Sequential([
-        LSTM(50, return_sequences=True, input_shape=(X_train.shape[1], X_train.shape[2])),
+        LSTM(50, return_sequences=True, input_shape=(X_train.shape[1], 1)),
         LSTM(50),
         Dense(1)
     ])
@@ -52,7 +48,7 @@ def train_model():
     model.save("models/lstm_stock_model.keras")
     joblib.dump(scaler, "models/scaler.pkl")
 
-    print("Model trained and saved successfully with new features!")
+    print("Model trained and saved successfully!")
 
 if __name__ == "__main__":
     train_model()

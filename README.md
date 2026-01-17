@@ -2,12 +2,11 @@
 
 ## Overview
 
-This project is an AI-powered stock price prediction application that forecasts future stock prices using a Long Short-Term Memory (LSTM) neural network. The application is built with Python and features a user-friendly web interface created with Streamlit. It incorporates feature engineering, including the use of simple moving averages, to enhance prediction accuracy. The codebase is structured for maintainability and includes unit tests to ensure reliability.
+This project is an AI-powered stock price prediction application that forecasts future stock prices using a Long Short-Term Memory (LSTM) neural network. The application is built with Python and features a user-friendly web interface created with Streamlit. The codebase is structured for maintainability and includes unit tests to ensure reliability.
 
 ## Key Features
 
-- **LSTM-Based Prediction Model**: Utilizes a sophisticated LSTM model to forecast stock prices based on historical data.
-- **Feature Engineering**: Enhances model accuracy by incorporating technical indicators, such as the 10-day Simple Moving Average (SMA).
+- **LSTM-Based Prediction Model**: Utilizes an LSTM model to forecast stock prices based on historical data.
 - **Interactive Web Interface**: A Streamlit application allows users to select from a list of Indian stocks and receive real-time price predictions.
 - **Data Visualization**: Displays historical stock price data in an interactive chart, providing users with visual context for the predictions.
 - **Modular and Maintainable Code**: The project is organized into distinct modules for data processing, model training, and application logic, following software engineering best practices.
@@ -20,13 +19,11 @@ This project is an AI-powered stock price prediction application that forecasts 
 ├── models/
 │   ├── lstm_stock_model.keras
 │   └── scaler.pkl
-├── src/
-│   ├── __init__.py
-│   ├── app.py
-│   ├── data_processing.py
-│   └── model_training.py
 ├── tests/
 │   └── test_data_processing.py
+├── app.py
+├── data_processing.py
+├── model_training.py
 ├── README.md
 └── requirements.txt
 ```
@@ -56,7 +53,7 @@ This project is an AI-powered stock price prediction application that forecasts 
 The project includes pre-trained model and scaler files. However, if you wish to retrain the model with the latest data, you can run the training script:
 
 ```sh
-python -m src.model_training
+python model_training.py
 ```
 
 _Note: The `yfinance` library can occasionally be unreliable. If you encounter data fetching errors during training, please try running the script again after a short while._
@@ -66,7 +63,7 @@ _Note: The `yfinance` library can occasionally be unreliable. If you encounter d
 To launch the Streamlit web interface, run the following command:
 
 ```sh
-streamlit run src/app.py
+streamlit run app.py
 ```
 
 You can then access the application in your web browser at `http://localhost:8501`.
